@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅程プランナー</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f7f6f3;
+    --bg-tertiary: #f0ede8;
+    --text: #1a1a1a;
+    --text-secondary: #6b6b6b;
+    --text-tertiary: #aaaaaa;
+    --border: rgba(0,0,0,0.12);
+    --border-md: rgba(0,0,0,0.22);
+    --accent: #1a1a1a;
+    --accent-text: #ffffff;
+    --blue-bg: #E6F1FB;
+    --blue-border: #B5D4F4;
+    --blue-text: #0C447C;
+    --danger: #A32D2D;
+    --danger-bg: #FCEBEB;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --font: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e;
+      --bg-secondary: #2c2c2e;
+      --bg-tertiary: #3a3a3c;
+      --text: #f0f0f0;
+      --text-secondary: #a0a0a0;
+      --text-tertiary: #606060;
+      --border: rgba(255,255,255,0.1);
+      --border-md: rgba(255,255,255,0.2);
+      --accent: #f0f0f0;
+      --accent-text: #1c1c1e;
+      --blue-bg: #0c2a44;
+      --blue-border: #1a4a7a;
+      --blue-text: #85B7EB;
+      --danger: #e57373;
+      --danger-bg: #3a1a1a;
+    }
+  }
+
+  html { font-size: 16px; }
+  body {
+    font-family: var(--font);
+    background: var(--bg-tertiary);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    background: var(--bg);
+    border-bottom: 0.5px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .logo i { font-size: 20px; }
+
+  /* Main */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 4px;
+    margin-bottom: 1.5rem;
+  }
+  .tab {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 13px;
+    background: none;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-family: var(--font);
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .tab.active {
+    background: var(--accent);
+    color: var(--accent-text);
+    font-weight: 500;
+  }
+  .tab:hover:not(.active) {
+    background: var(--bg-secondary);
+    color: var(--text);
+  }
+  .tab i { font-size: 15px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Card */
+  .card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 12px;
+  }
+
+  /* Form elements */
+  .row { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-end; }
+  .field { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+  label { font-size: 12px; color: var(--text-secondary); font-weight: 500; letter-spacing: 0.3px; }
+
+  input[type=text],
+  input[type=date],
+  input[type=time],
+  input[type=number],
+  select,
+  textarea {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: var(--font);
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    appearance: auto;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--border-md);
+    background: var(--bg);
+  }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    font-size: 13px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font);
+    font-weight: 500;
+    transition: all 0.15s;
+    white-space: nowrap;
+    border: none;
+  }
+  .btn i { font-size: 15px; }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+  .btn-primary:hover { opacity: 0.82; }
+  .btn-outline {
+    background: transparent;
+    border: 0.5px solid var(--border-md);
+    color: var(--text);
+  }
+  .btn-outline:hover { background: var(--bg-secondary); }
+  .btn-danger {
+    background: transparent;
+    border: 0.5px solid var(--border);
+    color: var(--danger);
+  }
+  .btn-danger:hover { background: var(--danger-bg); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn-sm i { font-size: 13px; }
+
+  /* Info box */
+  .info-box {
+    background: var(--blue-bg);
+    border: 0.5px solid var(--blue-border);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--blue-text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .info-box i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Schedule */
+  .day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .day-title { font-size: 14px; font-weight: 500; }
+  .day-date-sub { font-size: 12px; color: var(--text-secondary); margin-left: 8px; }
+
+  .schedule-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-top: 0.5px solid var(--border);
+  }
+  .time-col { font-size: 12px; color: var(--text-secondary); min-width: 52px; padding-top: 2px; }
+  .item-content { flex: 1; }
+  .item-title { font-size: 13px; font-weight: 500; }
+  .item-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .transport-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 0.5px solid var(--border);
+    margin-top: 4px;
+  }
+
+  .add-form {
+    background: var(--bg-secondary);
+    border: 0.5px dashed var(--border-md);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-top: 10px;
+  }
+  .transport-grid {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .t-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+    border: 0.5px solid var(--border-md);
+    border-radius: 99px;
+    background: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-family: var(--font);
+    transition: all 0.1s;
+  }
+  .t-btn.selected {
+    background: var(--accent);
+    color: var(--accent-text);
+    border-color: var(--accent);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-tertiary);
+  }
+  .empty-state i { font-size: 36px; display: block; margin-bottom: 12px; }
+  .empty-state p { font-size: 13px; }
+
+  /* Packing */
+  .cat-title {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item input[type=checkbox] { width: 16px; height: 16px; flex-shrink: 0; cursor: pointer; accent-color: var(--accent); }
+  .check-label { flex: 1; font-size: 13px; cursor: pointer; }
+  .check-label.done { text-decoration: line-through; color: var(--text-tertiary); }
+  .check-del { background: none; border: none; cursor: pointer; color: var(--text-tertiary); padding: 0 4px; line-height: 1; }
+  .check-del:hover { color: var(--danger); }
+  .check-del i { font-size: 14px; }
+
+  /* Summary stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+  .stat-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .stat-num { font-size: 24px; font-weight: 500; }
+  .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+  /* Preview */
+  .preview-area {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+  }
+  .pv-header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+  .pv-title { font-size: 24px; font-weight: 500; }
+  .pv-sub { font-size: 14px; color: var(--text-secondary); margin-top: 6px; }
+  .pv-day { margin-bottom: 1.5rem; }
+  .pv-day-title {
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--accent);
+    color: var(--accent-text);
+    padding: 5px 14px;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .pv-day-date { font-size: 12px; font-weight: 400; opacity: 0.7; }
+  .pv-row {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--border);
+    font-size: 13px;
+  }
+  .pv-time { min-width: 52px; color: var(--text-secondary); }
+  .pv-desc { flex: 1; }
+  .pv-note { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 1.25rem; }
+
+  /* Print */
+  @media print {
+    .header, .tabs, .actions, .info-box { display: none !important; }
+    body { background: white; }
+    .main { padding: 0; }
+    .preview-area { border: none; padding: 0; }
+    .section { display: none !important; }
+    #tab-preview { display: block !important; }
+  }
+
+  @media (max-width: 600px) {
+    .main { padding: 1rem; }
+    .header { padding: 0 1rem; }
+    .tab span { display: none; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .row { flex-wrap: wrap; }
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+let currentTripId=null;
+function collectState(){saveBasic();return JSON.parse(JSON.stringify(state))}
+function saveTrip(){
+ let trips=JSON.parse(localStorage.getItem('travelPlannerTrips')||'[]');
+ let name=(currentTripId && trips.find(x=>x.id===currentTripId)?.name)||prompt('旅程名を入力');
+ if(!name) return;
+ let id=currentTripId||Date.now().toString();
+ let obj={id,name,updatedAt:Date.now(),startDate:state.startDate||'',data:collectState()};
+ let idx=trips.findIndex(x=>x.id===id);
+ if(idx>=0) trips[idx]=obj; else trips.push(obj);
+ localStorage.setItem('travelPlannerTrips',JSON.stringify(trips));
+ currentTripId=id; alert('保存しました');
+}
+function openTripManager(){
+ let trips=JSON.parse(localStorage.getItem('travelPlannerTrips')||'[]');
+ trips.sort((a,b)=>(a.startDate||'9999').localeCompare(b.startDate||'9999'));
+ document.getElementById('trip-list').innerHTML=trips.map(t=>`<div style='padding:10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:10px'>
+ <div><b>${t.name}</b><div style='font-size:12px;color:var(--text-secondary)'>${t.startDate||'日付なし'}</div></div>
+ <div><button class='btn btn-outline btn-sm' onclick='loadTrip("${t.id}")'>読込</button>
+ <button class='btn btn-danger btn-sm' onclick='deleteTrip("${t.id}")'>削除</button></div></div>`).join('')||'保存旅程なし';
+ document.getElementById('trip-modal').style.display='flex';
+}
+function closeTripManager(){document.getElementById('trip-modal').style.display='none'}
+function loadTrip(id){
+ let t=JSON.parse(localStorage.getItem('travelPlannerTrips')||'[]').find(x=>x.id===id);
+ if(!t)return;
+ state=t.data; currentTripId=id;
+ document.getElementById('trip-title').value=state.title||'';
+ document.getElementById('destination').value=state.destination||'';
+ document.getElementById('trip-memo').value=state.memo||'';
+ document.getElementById('start-date').value=state.startDate||'';
+ document.getElementById('nights').value=state.nights||2;
+ renderDays(); renderPacking(); refreshPreview(); closeTripManager();
+}
+function deleteTrip(id){
+ let trips=JSON.parse(localStorage.getItem('travelPlannerTrips')||'[]').filter(x=>x.id!==id);
+ localStorage.setItem('travelPlannerTrips',JSON.stringify(trips)); openTripManager();
+}
+
+</script></head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <i class="ti ti-map-2"></i>
+      旅程プランナー
+    </div>
+    <div style="font-size:12px;color:var(--text-tertiary);">Travel Planner</div><div><button class='btn btn-outline btn-sm' onclick='saveTrip()'>保存</button> <button class='btn btn-primary btn-sm' onclick='openTripManager()'>旅程管理</button></div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('setup')"><i class="ti ti-settings"></i><span>基本設定</span></button>
+    <button class="tab" onclick="switchTab('schedule')"><i class="ti ti-clock"></i><span>スケジュール</span></button>
+    <button class="tab" onclick="switchTab('packing')"><i class="ti ti-briefcase"></i><span>持ち物</span></button>
+    <button class="tab" onclick="switchTab('preview')"><i class="ti ti-eye"></i><span>プレビュー</span></button>
+  </div>
+
+  <!-- 基本設定 -->
+  <div id="tab-setup" class="section active">
+    <div class="card">
+      <div class="row">
+        <div class="field">
+          <label>旅行タイトル</label>
+          <input type="text" id="trip-title" placeholder="例：京都・大阪の旅" oninput="saveBasic()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>出発日</label>
+          <input type="date" id="start-date" onchange="genDays()">
+        </div>
+        <div class="field" style="max-width:120px;">
+          <label>泊数</label>
+          <input type="number" id="nights" min="0" max="30" value="2" onchange="genDays()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>目的地</label>
+          <input type="text" id="destination" placeholder="例：東京都" oninput="saveBasic()">
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:16px;">
+        <label>メモ・備考</label>
+        <textarea id="trip-memo" placeholder="旅行の目的・注意事項など" oninput="saveBasic()"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="goToSchedule()">
+        <i class="ti ti-arrow-right"></i> スケジュール入力へ
+      </button>
+    </div>
+  </div>
+
+  <!-- スケジュール -->
+  <div id="tab-schedule" class="section">
+    <div id="days-container"></div>
+    <div id="no-days" class="empty-state" style="display:none;">
+      <i class="ti ti-calendar-off"></i>
+      <p>まず「基本設定」で出発日と泊数を入力してください</p>
+    </div>
+  </div>
+
+  <!-- 持ち物 -->
+  <div id="tab-packing" class="section">
+    <div class="card">
+      <div class="row" style="align-items:flex-end; margin-bottom:10px;">
+        <div class="field">
+          <label>アイテムを追加</label>
+          <input type="text" id="new-item-text" placeholder="例：パスポート" onkeydown="if(event.key==='Enter')addPackItem()">
+        </div>
+        <div class="field" style="max-width:130px;">
+          <label>カテゴリ</label>
+          <select id="new-item-cat">
+            <option value="必需品">必需品</option>
+            <option value="衣類">衣類</option>
+            <option value="衛生用品">衛生用品</option>
+            <option value="電子機器">電子機器</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addPackItem()">
+          <i class="ti ti-plus"></i> 追加
+        </button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="loadDefaultPacking()"><i class="ti ti-sparkles"></i> テンプレート読込</button>
+        <button class="btn btn-outline btn-sm" onclick="clearChecked()"><i class="ti ti-trash"></i> チェック済みを削除</button>
+      </div>
+    </div>
+    <div id="packing-list"></div>
+  </div>
+
+  <!-- プレビュー -->
+  <div id="tab-preview" class="section">
+    <div class="info-box">
+      <i class="ti ti-info-circle"></i>
+      <span>画像プレビューを長押し保存、または保存ボタンで画像保存できます。</span>
+    </div>
+    <div id="image-preview-wrap" style="margin-bottom:1rem;"><img id="preview-image" style="width:100%;border-radius:16px;display:none;border:1px solid var(--border);"></div><div class="preview-area" id="print-area">
+      <div class="pv-header">
+        <div class="pv-title" id="pv-title">旅行プラン</div>
+        <div class="pv-sub" id="pv-sub"></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="pv-nights">—</div><div class="stat-label">泊数</div></div>
+        <div class="stat-card"><div class="stat-num" id="pv-days">—</div><div class="stat-label">日程</div></div>
+      </div>
+      <div id="pv-schedule"></div>
+      <div id="pv-packing-wrap" style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+        <div style="font-size:15px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:6px;"><i class="ti ti-briefcase"></i> 持ち物リスト</div>
+        <div id="pv-packing"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="saveImage()"><i class="ti ti-device-floppy"></i> 画像を保存</button>
+      <button class="btn btn-outline" onclick="copyText()"><i class="ti ti-copy"></i> テキストコピー</button>
+      <button class="btn btn-outline" onclick="refreshPreview()"><i class="ti ti-refresh"></i> 更新</button>
+    </div>
+  </div>
+
+<div id="trip-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center;">
+<div style="background:var(--bg);padding:20px;border-radius:16px;width:min(95vw,700px);max-height:80vh;overflow:auto">
+<div style="display:flex;justify-content:space-between"><h3>旅程管理</h3><button class='btn btn-danger btn-sm' onclick='closeTripManager()'>閉じる</button></div>
+<div id="trip-list"></div></div></div>
+</main>
+
+<script>
+let state = {
+  title: '', destination: '', memo: '',
+  startDate: '', nights: 2,
+  days: [],
+  packing: []
+};
+
+const TRANSPORTS = ['徒歩','電車','バス','車','タクシー','飛行機','船','自転車'];
+const TRANSPORT_ICONS = {
+  '徒歩':'ti-walk','電車':'ti-train','バス':'ti-bus',
+  '車':'ti-car','タクシー':'ti-car','飛行機':'ti-plane',
+  '船':'ti-ship','自転車':'ti-bike'
+};
+
+function switchTab(t) {
+  const keys = ['setup','schedule','packing','preview'];
+  document.querySelectorAll('.tab').forEach((el,i) => el.classList.toggle('active', keys[i]===t));
+  document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  if(t==='preview') refreshPreview();
+}
+
+function saveBasic() {
+  state.title = document.getElementById('trip-title').value;
+  state.destination = document.getElementById('destination').value;
+  state.memo = document.getElementById('trip-memo').value;
+}
+
+function goToSchedule() {
+  saveBasic();
+  genDays();
+  switchTab('schedule');
+}
+
+function formatDateJa(dateStr) {
+  if(!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('ja-JP', {month:'long', day:'numeric', weekday:'short'});
+}
+
+function genDays() {
+  const sd = document.getElementById('start-date').value;
+  const n = parseInt(document.getElementById('nights').value) || 0;
+  state.startDate = sd;
+  state.nights = n;
+  const total = n + 1;
+  const existing = state.days;
+  state.days = Array.from({length: total}, (_, i) => {
+    const ex = existing[i];
+    let dateStr = '';
+    if(sd) {
+      const d = new Date(sd + 'T00:00:00');
+      d.setDate(d.getDate() + i);
+      dateStr = d.toISOString().split('T')[0];
+    }
+    return ex ? {...ex, date: dateStr} : { date: dateStr, items: [] };
+  });
+  renderDays();persist();
+}
+
+function sortItems(items) {
+  return [...items].sort((a, b) => {
+    if(!a.time && !b.time) return 0;
+    if(!a.time) return 1;
+    if(!b.time) return -1;
+    return a.time.localeCompare(b.time);
+  });
+}
+
+function renderDays() {
+  const c = document.getElementById('days-container');
+  const nd = document.getElementById('no-days');
+  if(!state.days.length) { c.innerHTML=''; nd.style.display='block'; return; }
+  nd.style.display='none';
+  c.innerHTML = state.days.map((day, di) => {
+    const label = di===0 ? '出発日' : di===state.days.length-1 ? '最終日' : `${di+1}日目`;
+    const dateStr = formatDateJa(day.date);
+    const sorted = sortItems(day.items);
+    return `<div class="card" id="day-${di}">
+      <div class="day-header">
+        <div>
+          <span class="day-title">Day ${di+1} — ${label}</span>
+          <span class="day-date-sub">${dateStr}</span>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="toggleAddForm(${di})"><i class="ti ti-plus"></i> 追加</button>
+      </div>
+      <div id="items-${di}">
+        ${sorted.length ? sorted.map(it => {
+          const origIdx = state.days[di].items.indexOf(it);
+          return `<div class="schedule-item">
+            <div class="time-col">${it.time || '—'}</div>
+            <div class="item-content">
+              <div class="item-title">${escHtml(it.title)}</div>
+              ${it.note ? `<div class="item-meta">${escHtml(it.note)}</div>` : ''}
+              ${it.transport ? `<span class="transport-badge"><i class="ti ${TRANSPORT_ICONS[it.transport]||'ti-arrow-right'}"></i>${it.transport}</span>` : ''}
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="removeItem(${di},${origIdx})"><i class="ti ti-x"></i></button>
+          </div>`;
+        }).join('') : '<div style="color:var(--text-tertiary);font-size:13px;padding:10px 0;">まだ予定がありません</div>'}
+      </div>
+      <div class="add-form" id="add-form-${di}" style="display:none;">
+        <div class="row">
+          <div class="field" style="max-width:100px;"><label>時刻</label><input type="time" id="f-time-${di}"></div>
+          <div class="field"><label>内容</label><input type="text" id="f-title-${di}" placeholder="例：金閣寺 見学" onkeydown="if(event.key==='Enter')addItem(${di})"></div>
+        </div>
+        <div class="field" style="margin-bottom:10px;"><label>メモ</label><input type="text" id="f-note-${di}" placeholder="所要時間・料金など"></div>
+        <div class="field" style="margin-bottom:12px;">
+          <label>移動手段</label>
+          <div class="transport-grid" id="t-sel-${di}">
+            ${TRANSPORTS.map(t => `<button class="t-btn" onclick="selTransport(${di},'${t}')" id="tbtn-${di}-${t}"><i class="ti ${TRANSPORT_ICONS[t]||'ti-arrow-right'}"></i> ${t}</button>`).join('')}
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary btn-sm" onclick="addItem(${di})"><i class="ti ti-check"></i> 追加</button>
+          <button class="btn btn-outline btn-sm" onclick="toggleAddForm(${di})">キャンセル</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let selectedTransport = {};
+
+function selTransport(di, t) {
+  selectedTransport[di] = selectedTransport[di] === t ? null : t;
+  document.querySelectorAll(`#t-sel-${di} .t-btn`).forEach(btn => btn.classList.remove('selected'));
+  if(selectedTransport[di]) {
+    const el = document.getElementById(`tbtn-${di}-${t}`);
+    if(el) el.classList.add('selected');
+  }
+}
+
+function toggleAddForm(di) {
+  const f = document.getElementById(`add-form-${di}`);
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+  if(f.style.display === 'block') document.getElementById(`f-title-${di}`).focus();
+}
+
+function addItem(di) {
+  const time = document.getElementById(`f-time-${di}`).value;
+  const title = document.getElementById(`f-title-${di}`).value.trim();
+  const note = document.getElementById(`f-note-${di}`).value.trim();
+  if(!title) return;
+  state.days[di].items.push({ time, title, note, transport: selectedTransport[di] || '' });
+  selectedTransport[di] = null;
+  renderDays();persist();
+}
+
+function removeItem(di, ii) {
+  state.days[di].items.splice(ii, 1);
+  renderDays();persist();
+}
+
+// --- Packing ---
+const DEFAULT_PACKING = [
+  {cat:'必需品',text:'パスポート / 身分証'},{cat:'必需品',text:'財布・現金'},{cat:'必需品',text:'クレジットカード'},
+  {cat:'必需品',text:'スマートフォン・充電器'},{cat:'必需品',text:'薬・常備薬'},
+  {cat:'衣類',text:'着替え（日数分）'},{cat:'衣類',text:'下着・靴下'},{cat:'衣類',text:'パジャマ'},{cat:'衣類',text:'羽織り物'},
+  {cat:'衛生用品',text:'歯ブラシ・歯磨き粉'},{cat:'衛生用品',text:'シャンプー・ボディソープ'},{cat:'衛生用品',text:'化粧品'},{cat:'衛生用品',text:'日焼け止め'},
+  {cat:'電子機器',text:'カメラ・充電器'},{cat:'電子機器',text:'モバイルバッテリー'},{cat:'電子機器',text:'イヤホン'},
+  {cat:'その他',text:'エコバッグ'},{cat:'その他',text:'折り畳み傘'}
+];
+
+function loadDefaultPacking() {
+  DEFAULT_PACKING.forEach(({cat, text}) => {
+    if(!state.packing.find(p => p.text === text)) state.packing.push({cat, text, checked: false});
+  });
+  
+function persist(){localStorage.setItem('travelPlannerState',JSON.stringify(state));}
+function restore(){
+const s=localStorage.getItem('travelPlannerState'); if(!s) return;
+try{ state=JSON.parse(s);
+document.getElementById('trip-title').value=state.title||'';
+document.getElementById('destination').value=state.destination||'';
+document.getElementById('trip-memo').value=state.memo||'';
+document.getElementById('start-date').value=state.startDate||'';
+document.getElementById('nights').value=state.nights||2;
+genDays(); renderPacking();persist();
+}catch(e){console.log(e)}
+}
+async function makePreviewImage(){
+refreshPreview();
+const el=document.getElementById('print-area');
+const canvas=await html2canvas(el,{scale:2,backgroundColor:null});
+const url=canvas.toDataURL('image/png');
+const img=document.getElementById('preview-image');
+img.src=url; img.style.display='block';
+return url;
+}
+async function saveImage(){
+const url=await makePreviewImage();
+const a=document.createElement('a'); a.href=url;a.download='travel-plan.png';a.click();
+}
+
+renderPacking();persist();restore();
+}
+
+function addPackItem() {
+  const text = document.getElementById('new-item-text').value.trim();
+  const cat = document.getElementById('new-item-cat').value;
+  if(!text) return;
+  state.packing.push({cat, text, checked: false});
+  document.getElementById('new-item-text').value = '';
+  
+function persist(){localStorage.setItem('travelPlannerState',JSON.stringify(state));}
+function restore(){
+const s=localStorage.getItem('travelPlannerState'); if(!s) return;
+try{ state=JSON.parse(s);
+document.getElementById('trip-title').value=state.title||'';
+document.getElementById('destination').value=state.destination||'';
+document.getElementById('trip-memo').value=state.memo||'';
+document.getElementById('start-date').value=state.startDate||'';
+document.getElementById('nights').value=state.nights||2;
+genDays(); renderPacking();persist();
+}catch(e){console.log(e)}
+}
+async function makePreviewImage(){
+refreshPreview();
+const el=document.getElementById('print-area');
+const canvas=await html2canvas(el,{scale:2,backgroundColor:null});
+const url=canvas.toDataURL('image/png');
+const img=document.getElementById('preview-image');
+img.src=url; img.style.display='block';
+return url;
+}
+async function saveImage(){
+const url=await makePreviewImage();
+const a=document.createElement('a'); a.href=url;a.download='travel-plan.png';a.click();
+}
+
+renderPacking();persist();restore();
+}
+
+function toggleCheck(i) {
+  state.packing[i].checked = !state.packing[i].checked;
+  
+function persist(){localStorage.setItem('travelPlannerState',JSON.stringify(state));}
+function restore(){
+const s=localStorage.getItem('travelPlannerState'); if(!s) return;
+try{ state=JSON.parse(s);
+document.getElementById('trip-title').value=state.title||'';
+document.getElementById('destination').value=state.destination||'';
+document.getElementById('trip-memo').value=state.memo||'';
+document.getElementById('start-date').value=state.startDate||'';
+document.getElementById('nights').value=state.nights||2;
+genDays(); renderPacking();persist();
+}catch(e){console.log(e)}
+}
+async function makePreviewImage(){
+refreshPreview();
+const el=document.getElementById('print-area');
+const canvas=await html2canvas(el,{scale:2,backgroundColor:null});
+const url=canvas.toDataURL('image/png');
+const img=document.getElementById('preview-image');
+img.src=url; img.style.display='block';
+return url;
+}
+async function saveImage(){
+const url=await makePreviewImage();
+const a=document.createElement('a'); a.href=url;a.download='travel-plan.png';a.click();
+}
+
+renderPacking();persist();restore();
+}
+
+function deletePack(i) {
+  state.packing.splice(i, 1);
+  
+function persist(){localStorage.setItem('travelPlannerState',JSON.stringify(state));}
+function restore(){
+const s=localStorage.getItem('travelPlannerState'); if(!s) return;
+try{ state=JSON.parse(s);
+document.getElementById('trip-title').value=state.title||'';
+document.getElementById('destination').value=state.destination||'';
+document.getElementById('trip-memo').value=state.memo||'';
+document.getElementById('start-date').value=state.startDate||'';
+document.getElementById('nights').value=state.nights||2;
+genDays(); renderPacking();persist();
+}catch(e){console.log(e)}
+}
+async function makePreviewImage(){
+refreshPreview();
+const el=document.getElementById('print-area');
+const canvas=await html2canvas(el,{scale:2,backgroundColor:null});
+const url=canvas.toDataURL('image/png');
+const img=document.getElementById('preview-image');
+img.src=url; img.style.display='block';
+return url;
+}
+async function saveImage(){
+const url=await makePreviewImage();
+const a=document.createElement('a'); a.href=url;a.download='travel-plan.png';a.click();
+}
+
+renderPacking();persist();restore();
+}
+
+function clearChecked() {
+  state.packing = state.packing.filter(p => !p.checked);
+  
+function persist(){localStorage.setItem('travelPlannerState',JSON.stringify(state));}
+function restore(){
+const s=localStorage.getItem('travelPlannerState'); if(!s) return;
+try{ state=JSON.parse(s);
+document.getElementById('trip-title').value=state.title||'';
+document.getElementById('destination').value=state.destination||'';
+document.getElementById('trip-memo').value=state.memo||'';
+document.getElementById('start-date').value=state.startDate||'';
+document.getElementById('nights').value=state.nights||2;
+genDays(); renderPacking();persist();
+}catch(e){console.log(e)}
+}
+async function makePreviewImage(){
+refreshPreview();
+const el=document.getElementById('print-area');
+const canvas=await html2canvas(el,{scale:2,backgroundColor:null});
+const url=canvas.toDataURL('image/png');
+const img=document.getElementById('preview-image');
+img.src=url; img.style.display='block';
+return url;
+}
+async function saveImage(){
+const url=await makePreviewImage();
+const a=document.createElement('a'); a.href=url;a.download='travel-plan.png';a.click();
+}
+
+renderPacking();persist();restore();
+}
+
+function renderPacking() {
+  const cats = [...new Set(state.packing.map(p => p.cat))];
+  if(!cats.length) {
+    document.getElementById('packing-list').innerHTML =
+      '<div class="empty-state"><i class="ti ti-briefcase-off"></i><p>「テンプレート読込」でよくある持ち物を一括追加できます</p></div>';
+    return;
+  }
+  document.getElementById('packing-list').innerHTML = cats.map(cat => {
+    const items = state.packing.map((p, i) => ({...p, i})).filter(p => p.cat === cat);
+    const done = items.filter(p => p.checked).length;
+    return `<div class="card">
+      <div class="cat-title">${cat} <span style="color:var(--text-tertiary);font-weight:400;">${done}/${items.length}</span></div>
+      ${items.map(p => `<div class="check-item">
+        <input type="checkbox" ${p.checked ? 'checked' : ''} onchange="toggleCheck(${p.i})" id="ck-${p.i}">
+        <label class="check-label ${p.checked ? 'done' : ''}" for="ck-${p.i}">${escHtml(p.text)}</label>
+        <button class="check-del" onclick="deletePack(${p.i})" aria-label="削除"><i class="ti ti-x"></i></button>
+      </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+// --- Preview ---
+function refreshPreview() {
+  saveBasic();
+  const title = state.title || '旅行プラン';
+  const nights = state.nights;
+  const sd = state.startDate;
+  const sdStr = sd ? new Date(sd + 'T00:00:00').toLocaleDateString('ja-JP', {year:'numeric',month:'long',day:'numeric'}) : '';
+  const ed = sd ? (() => {
+    const d = new Date(sd + 'T00:00:00');
+    d.setDate(d.getDate() + nights);
+    return d.toLocaleDateString('ja-JP', {year:'numeric',month:'long',day:'numeric'});
+  })() : '';
+
+  document.getElementById('pv-title').textContent = title;
+  document.getElementById('pv-sub').textContent =
+    [state.destination, sdStr && ed ? `${sdStr} 〜 ${ed}` : sdStr].filter(Boolean).join('　|　');
+  document.getElementById('pv-nights').textContent = nights + '泊';
+  document.getElementById('pv-days').textContent = (parseInt(nights)||0) + 1 + '日間';
+
+  const sch = document.getElementById('pv-schedule');
+  if(!state.days.length) {
+    sch.innerHTML = '<p style="color:var(--text-tertiary);font-size:13px;">スケジュールが未入力です</p>';
+  } else {
+    sch.innerHTML = state.days.map((day, di) => {
+      const label = di===0 ? '出発日' : di===state.days.length-1 ? '最終日' : `${di+1}日目`;
+      const dateStr = formatDateJa(day.date);
+      const sorted = sortItems(day.items);
+      return `<div class="pv-day">
+        <div class="pv-day-title">
+          Day ${di+1} — ${label}
+          ${dateStr ? `<span class="pv-day-date">${dateStr}</span>` : ''}
+        </div>
+        ${sorted.length ? sorted.map(it => `<div class="pv-row">
+          <div class="pv-time">${it.time || '—'}</div>
+          <div class="pv-desc">
+            <div>${escHtml(it.title)}</div>
+            ${it.note ? `<div class="pv-note">${escHtml(it.note)}</div>` : ''}
+            ${it.transport ? `<span style="font-size:11px;color:var(--text-secondary);"><i class="ti ${TRANSPORT_ICONS[it.transport]||'ti-arrow-right'}"></i> ${it.transport}</span>` : ''}
+          </div>
+        </div>`).join('') : '<p style="color:var(--text-tertiary);font-size:12px;padding:6px 0;">予定なし</p>'}
+      </div>`;
+    }).join('');
+  }
+
+  const cats = [...new Set(state.packing.map(p => p.cat))];
+  const pvp = document.getElementById('pv-packing');
+  if(!cats.length) {
+    pvp.innerHTML = '<p style="color:var(--text-tertiary);font-size:13px;">持ち物リストが未入力です</p>';
+  } else {
+    pvp.innerHTML = cats.map(cat => {
+      const items = state.packing.filter(p => p.cat === cat);
+      return `<div style="margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:6px;">${cat}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${items.map(p => `<span style="font-size:12px;padding:3px 10px;border:0.5px solid var(--border);border-radius:99px;background:var(--bg-secondary);${p.checked?'text-decoration:line-through;color:var(--text-tertiary);':''}">${p.checked?'✓ ':''}${escHtml(p.text)}</span>`).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function printItinerary() {
+  refreshPreview();
+  window.print();
+}
+
+function copyText() {
+  refreshPreview();
+  let txt = (state.title || '旅程') + '\n' + '='.repeat(30) + '\n';
+  if(state.destination) txt += '目的地：' + state.destination + '\n';
+  if(state.startDate) txt += '出発日：' + new Date(state.startDate+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}) + '\n';
+  txt += '泊数：' + state.nights + '泊\n\n';
+  state.days.forEach((day, di) => {
+    const label = di===0 ? '出発日' : di===state.days.length-1 ? '最終日' : `${di+1}日目`;
+    const dateStr = formatDateJa(day.date);
+    txt += `【Day ${di+1} — ${label}】${dateStr}\n`;
+    sortItems(day.items).forEach(it => {
+      txt += `  ${it.time || '--:--'}  ${it.title}${it.note?' ('+it.note+')':''}${it.transport?' ['+it.transport+']':''}\n`;
+    });
+    txt += '\n';
+  });
+  if(state.packing.length) {
+    txt += '持ち物リスト\n' + '-'.repeat(20) + '\n';
+    [...new Set(state.packing.map(p=>p.cat))].forEach(cat => {
+      txt += `[${cat}]\n`;
+      state.packing.filter(p=>p.cat===cat).forEach(p=>{ txt += `  ${p.checked?'✓':'□'} ${p.text}\n`; });
+    });
+  }
+  navigator.clipboard.writeText(txt)
+    .then(() => alert('テキストをクリップボードにコピーしました'))
+    .catch(() => alert('コピーに失敗しました'));
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+
+function persist(){localStorage.setItem('travelPlannerState',JSON.stringify(state));}
+function restore(){
+const s=localStorage.getItem('travelPlannerState'); if(!s) return;
+try{ state=JSON.parse(s);
+document.getElementById('trip-title').value=state.title||'';
+document.getElementById('destination').value=state.destination||'';
+document.getElementById('trip-memo').value=state.memo||'';
+document.getElementById('start-date').value=state.startDate||'';
+document.getElementById('nights').value=state.nights||2;
+genDays(); renderPacking();persist();
+}catch(e){console.log(e)}
+}
+async function makePreviewImage(){
+refreshPreview();
+const el=document.getElementById('print-area');
+const canvas=await html2canvas(el,{scale:2,backgroundColor:null});
+const url=canvas.toDataURL('image/png');
+const img=document.getElementById('preview-image');
+img.src=url; img.style.display='block';
+return url;
+}
+async function saveImage(){
+const url=await makePreviewImage();
+const a=document.createElement('a'); a.href=url;a.download='travel-plan.png';a.click();
+}
+
+renderPacking();persist();restore();
+
+currentTripId=null;
+function collectState(){saveBasic();return JSON.parse(JSON.stringify(state))}
+function saveTrip(){
+ let trips=JSON.parse(localStorage.getItem('travelPlannerTrips')||'[]');
+ let name=(currentTripId && trips.find(x=>x.id===currentTripId)?.name)||prompt('旅程名を入力');
+ if(!name) return;
+ let id=currentTripId||Date.now().toString();
+ let obj={id,name,updatedAt:Date.now(),startDate:state.startDate||'',data:collectState()};
+ let idx=trips.findIndex(x=>x.id===id);
+ if(idx>=0) trips[idx]=obj; else trips.push(obj);
+ localStorage.setItem('travelPlannerTrips',JSON.stringify(trips));
+ currentTripId=id; alert('保存しました');
+}
+function openTripManager(){
+ let trips=JSON.parse(localStorage.getItem('travelPlannerTrips')||'[]');
+ trips.sort((a,b)=>(a.startDate||'9999').localeCompare(b.startDate||'9999'));
+ document.getElementById('trip-list').innerHTML=trips.map(t=>`<div style='padding:10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:10px'>
+ <div><b>${t.name}</b><div style='font-size:12px;color:var(--text-secondary)'>${t.startDate||'日付なし'}</div></div>
+ <div><button class='btn btn-outline btn-sm' onclick='loadTrip("${t.id}")'>読込</button>
+ <button class='btn btn-danger btn-sm' onclick='deleteTrip("${t.id}")'>削除</button></div></div>`).join('')||'保存旅程なし';
+ document.getElementById('trip-modal').style.display='flex';
+}
+function closeTripManager(){document.getElementById('trip-modal').style.display='none'}
+function loadTrip(id){
+ let t=JSON.parse(localStorage.getItem('travelPlannerTrips')||'[]').find(x=>x.id===id);
+ if(!t)return;
+ state=t.data; currentTripId=id;
+ document.getElementById('trip-title').value=state.title||'';
+ document.getElementById('destination').value=state.destination||'';
+ document.getElementById('trip-memo').value=state.memo||'';
+ document.getElementById('start-date').value=state.startDate||'';
+ document.getElementById('nights').value=state.nights||2;
+ renderDays(); renderPacking(); refreshPreview(); closeTripManager();
+}
+function deleteTrip(id){
+ let trips=JSON.parse(localStorage.getItem('travelPlannerTrips')||'[]').filter(x=>x.id!==id);
+ localStorage.setItem('travelPlannerTrips',JSON.stringify(trips)); openTripManager();
+}
+
+</script>
+</body>
+</html>
