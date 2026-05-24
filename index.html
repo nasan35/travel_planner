@@ -14,6 +14,7 @@
   --border:rgba(0,0,0,0.12); --bordermd:rgba(0,0,0,0.22);
   --accent:#1a1a1a; --accentt:#fff;
   --danger:#A32D2D; --dangerb:#FCEBEB;
+  --teal:#0d7e6a; --tealb:#e6f5f2;
   --r:8px; --rl:12px;
   --font:'Hiragino Kaku Gothic ProN','Hiragino Sans','Meiryo',sans-serif;
   --sb:env(safe-area-inset-bottom,0px);
@@ -25,6 +26,7 @@
   --border:rgba(255,255,255,0.1);--bordermd:rgba(255,255,255,0.2);
   --accent:#f0f0f0;--accentt:#1c1c1e;
   --danger:#e57373;--dangerb:#3a1a1a;
+  --teal:#4db8a5;--tealb:#0d2e2a;
 }}
 html{font-size:16px;-webkit-text-size-adjust:100%;}
 body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:100dvh;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:calc(64px + var(--sb));}
@@ -36,8 +38,6 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
 .logo i{font-size:20px;}
 .hd-right{display:flex;align-items:center;gap:8px;}
 .hd-sub{font-size:11px;color:var(--text3);}
-
-/* 履歴ボタン（ヘッダー右） */
 .hist-btn{display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:12px;font-weight:500;font-family:var(--font);background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r);cursor:pointer;color:var(--text2);transition:all .15s;-webkit-tap-highlight-color:transparent;}
 .hist-btn:hover{background:var(--bg3);color:var(--text);}
 .hist-btn i{font-size:15px;}
@@ -88,25 +88,45 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 .bo:active{background:var(--bg2);}
 .bd{background:transparent;border:.5px solid var(--border);color:var(--danger);}
 .bd:active{background:var(--dangerb);}
+.bt{background:transparent;border:.5px solid var(--teal);color:var(--teal);}
+.bt:active{background:var(--tealb);}
 .bsm{padding:6px 10px;font-size:12px;min-height:36px;}
 .bsm i{font-size:13px;}
 .bfull{width:100%;}
+.save-bar{display:flex;gap:8px;margin-bottom:12px;}
 
-/* ── schedule ── */
+/* ── schedule list ── */
 .dh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;}
 .dl{min-width:0;}
 .dt{font-size:14px;font-weight:500;}
 .dd{font-size:12px;color:var(--text2);display:block;margin-top:1px;}
+/* 予定行 */
 .si{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:.5px solid var(--border);}
 .tc{font-size:12px;color:var(--text2);min-width:46px;padding-top:2px;flex-shrink:0;}
 .ic{flex:1;min-width:0;}
 .it{font-size:13px;font-weight:500;word-break:break-all;}
 .im{font-size:12px;color:var(--text2);margin-top:2px;}
 .tb2{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:99px;background:var(--bg2);color:var(--text2);border:.5px solid var(--border);margin-top:4px;}
+/* 移動行 */
+.si-move{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:.5px solid var(--border);background:var(--tealb);}
+.move-icon{font-size:18px;min-width:46px;text-align:center;padding-top:2px;flex-shrink:0;}
+.move-body{flex:1;min-width:0;}
+.move-title{font-size:13px;font-weight:500;color:var(--teal);word-break:break-all;}
+.move-meta{font-size:12px;color:var(--text2);margin-top:2px;}
+
+/* ── 追加フォーム共通 ── */
 .af{background:var(--bg2);border:.5px dashed var(--bordermd);border-radius:var(--r);padding:12px;margin-top:10px;}
+/* タブ切り替え（予定 / 移動） */
+.af-tabs{display:flex;gap:4px;margin-bottom:12px;}
+.af-tab{flex:1;padding:7px;font-size:12px;font-weight:500;border:none;border-radius:var(--r);cursor:pointer;font-family:var(--font);background:var(--bg3);color:var(--text2);transition:all .15s;}
+.af-tab.on{background:var(--accent);color:var(--accentt);}
+.af-tab-move.on{background:var(--teal);color:#fff;}
+.af-pane{display:none;} .af-pane.on{display:block;}
+
 .tg{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
 .tbt{padding:5px 11px;font-size:12px;border:.5px solid var(--bordermd);border-radius:99px;background:none;cursor:pointer;color:var(--text2);font-family:var(--font);transition:all .1s;min-height:32px;-webkit-tap-highlight-color:transparent;}
 .tbt.on{background:var(--accent);color:var(--accentt);border-color:var(--accent);}
+.tbt-move.on{background:var(--teal);color:#fff;border-color:var(--teal);}
 .es{text-align:center;padding:3rem 1rem;color:var(--text3);}
 .es i{font-size:36px;display:block;margin-bottom:12px;}
 .es p{font-size:13px;}
@@ -130,90 +150,43 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 .icard canvas{width:100%;display:block;}
 .icard-ft{padding:10px 14px;display:flex;gap:8px;flex-wrap:wrap;}
 
-/* ── save-bar (設定タブ内) ── */
-.save-bar{display:flex;gap:8px;margin-bottom:12px;}
-
-/* ════════════════════════════
-   履歴モーダル
-════════════════════════════ */
-.modal-back{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
-  z-index:500;align-items:flex-end;justify-content:center;
-  -webkit-tap-highlight-color:transparent;
-}
+/* ── 履歴モーダル ── */
+.modal-back{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end;justify-content:center;-webkit-tap-highlight-color:transparent;}
 .modal-back.on{display:flex;}
-@media(min-width:601px){
-  .modal-back{align-items:center;}
-}
-
-.modal{
-  background:var(--bg);width:100%;max-width:560px;
-  border-radius:var(--rl) var(--rl) 0 0;
-  max-height:85dvh;display:flex;flex-direction:column;
-  box-shadow:0 -4px 40px rgba(0,0,0,.18);
-  animation:slideUp .22s ease;
-}
-@media(min-width:601px){
-  .modal{border-radius:var(--rl);max-height:80dvh;margin:1rem;}
-  @keyframes slideUp{from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none}}
-}
+@media(min-width:601px){.modal-back{align-items:center;}}
+.modal{background:var(--bg);width:100%;max-width:560px;border-radius:var(--rl) var(--rl) 0 0;max-height:85dvh;display:flex;flex-direction:column;box-shadow:0 -4px 40px rgba(0,0,0,.18);animation:slideUp .22s ease;}
+@media(min-width:601px){.modal{border-radius:var(--rl);max-height:80dvh;margin:1rem;}}
 @keyframes slideUp{from{transform:translateY(100%)} to{transform:translateY(0)}}
-
-.modal-hd{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 20px 14px;border-bottom:.5px solid var(--border);flex-shrink:0;
-}
+@media(min-width:601px){@keyframes slideUp{from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none}}}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:.5px solid var(--border);flex-shrink:0;}
 .modal-title{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px;}
 .modal-title i{font-size:18px;}
 .modal-close{background:none;border:none;cursor:pointer;color:var(--text2);padding:4px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;}
 .modal-close i{font-size:20px;}
 .modal-close:hover{background:var(--bg2);}
-
 .modal-body{overflow-y:auto;flex:1;padding:16px 20px;}
-
-/* 新規旅行ボタン（モーダル内） */
-.modal-new{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 14px;border-radius:var(--r);
-  border:1.5px dashed var(--border);
-  background:none;width:100%;cursor:pointer;font-family:var(--font);
-  color:var(--text2);font-size:13px;margin-bottom:16px;
-  transition:all .15s;-webkit-tap-highlight-color:transparent;
-}
+.modal-new{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:var(--r);border:1.5px dashed var(--border);background:none;width:100%;cursor:pointer;font-family:var(--font);color:var(--text2);font-size:13px;margin-bottom:16px;transition:all .15s;-webkit-tap-highlight-color:transparent;}
 .modal-new:hover{border-color:var(--bordermd);color:var(--text);background:var(--bg2);}
 .modal-new i{font-size:18px;flex-shrink:0;}
-
-/* 旅程カード（モーダル内） */
-.hist-item{
-  display:flex;align-items:stretch;gap:0;
-  border:.5px solid var(--border);border-radius:var(--r);
-  margin-bottom:10px;overflow:hidden;
-  background:var(--bg);transition:box-shadow .15s;
-}
+.hist-item{display:flex;align-items:stretch;border:.5px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden;background:var(--bg);transition:box-shadow .15s;}
 .hist-item:hover{box-shadow:0 2px 12px rgba(0,0,0,.08);}
-
 .hist-left{flex:1;padding:12px 14px;cursor:pointer;min-width:0;}
 .hist-left:hover{background:var(--bg2);}
 .hist-name{font-size:14px;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hist-meta{font-size:12px;color:var(--text2);display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
 .hist-tag{display:inline-flex;align-items:center;gap:3px;font-size:11px;background:var(--bg2);border:.5px solid var(--border);border-radius:99px;padding:2px 8px;}
-
 .hist-actions{display:flex;flex-direction:column;border-left:.5px solid var(--border);flex-shrink:0;}
 .hist-act-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:0 14px;background:none;border:none;cursor:pointer;color:var(--text2);font-size:12px;gap:5px;font-family:var(--font);transition:background .12s;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
 .hist-act-btn:first-child{border-bottom:.5px solid var(--border);}
 .hist-act-btn:hover{background:var(--bg2);}
 .hist-act-btn.del:hover{background:var(--dangerb);color:var(--danger);}
 .hist-act-btn i{font-size:15px;}
-
 .hist-empty{text-align:center;padding:2.5rem 1rem;color:var(--text3);}
 .hist-empty i{font-size:32px;display:block;margin-bottom:10px;}
 .hist-empty p{font-size:13px;}
 
-/* 確認ダイアログ */
-.confirm-wrap{
-  position:fixed;inset:0;background:rgba(0,0,0,.55);
-  z-index:600;display:none;align-items:center;justify-content:center;padding:1rem;
-}
+/* ── 確認ダイアログ ── */
+.confirm-wrap{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:600;display:none;align-items:center;justify-content:center;padding:1rem;}
 .confirm-wrap.on{display:flex;}
 .confirm-box{background:var(--bg);border-radius:var(--rl);padding:24px;max-width:320px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.2);}
 .confirm-title{font-size:15px;font-weight:600;margin-bottom:8px;}
@@ -241,7 +214,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
   .row{flex-direction:column;gap:8px;}
   .fld{width:100%!important;max-width:none!important;}
   .af .row{flex-direction:row;}
-  .af .row .fld:first-child{max-width:90px!important;flex:0 0 90px!important;}
+  .af .row .fld.time-fld{max-width:90px!important;flex:0 0 90px!important;}
   .icard-ft{flex-direction:column;}
   .icard-ft .btn{width:100%;}
   .save-bar{flex-direction:column;}
@@ -251,15 +224,14 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 </head>
 <body>
 
-<!-- ローディング -->
 <div class="ov" id="ov"><div class="spin"></div><div id="ov-msg">生成中…</div></div>
 <div class="toast" id="toast"></div>
 
-<!-- 削除確認ダイアログ -->
+<!-- 削除確認 -->
 <div class="confirm-wrap" id="confirm-wrap">
   <div class="confirm-box">
     <div class="confirm-title">旅程を削除しますか？</div>
-    <div class="confirm-msg" id="confirm-msg">この旅程を削除します。この操作は取り消せません。</div>
+    <div class="confirm-msg" id="confirm-msg"></div>
     <div class="confirm-btns">
       <button class="btn bo" onclick="closeConfirm()">キャンセル</button>
       <button class="btn bd" id="confirm-ok">削除する</button>
@@ -269,7 +241,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 
 <!-- 履歴モーダル -->
 <div class="modal-back" id="modal-back" onclick="closeModal(event)">
-  <div class="modal" id="modal">
+  <div class="modal">
     <div class="modal-hd">
       <div class="modal-title"><i class="ti ti-history"></i> 旅程の履歴</div>
       <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
@@ -316,7 +288,6 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 
   <!-- 基本設定 -->
   <div id="tab-setup" class="sec on">
-    <!-- 保存・新規ボタン -->
     <div class="save-bar">
       <button class="btn bp" style="flex:1;" onclick="saveTrip()"><i class="ti ti-device-floppy"></i> 現在の旅程を保存</button>
       <button class="btn bo" onclick="newTrip()"><i class="ti ti-plus"></i> 新規作成</button>
@@ -368,17 +339,17 @@ textarea{resize:vertical;min-height:80px;line-height:1.5;}
 </main>
 
 <script>
-/* ══════════════════════════════════════
+/* ══════════════════════════
    STATE
-══════════════════════════════════════ */
+══════════════════════════ */
 const S = { title:'', destination:'', memo:'', startDate:'', nights:2, days:[], packing:[], _id:null };
 const TI = {'徒歩':'🚶','電車':'🚃','バス':'🚌','車':'🚗','タクシー':'🚕','飛行機':'✈️','船':'⛴️','自転車':'🚲'};
 const TRANS = Object.keys(TI);
 const LS_KEY = 'trip_planner_histories';
 
-/* ══════════════════════════════════════
+/* ══════════════════════════
    TABS
-══════════════════════════════════════ */
+══════════════════════════ */
 function sw(t){
   ['setup','schedule','packing','save'].forEach(k=>{
     ['tt-','bn-'].forEach(p=>{const e=document.getElementById(p+k);if(e)e.classList.toggle('on',k===t);});
@@ -387,96 +358,238 @@ function sw(t){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ══════════════════════════════════════
+/* ══════════════════════════
    BASIC
-══════════════════════════════════════ */
+══════════════════════════ */
 function readForm(){
   S.title       = document.getElementById('trip-title').value.trim();
   S.destination = document.getElementById('destination').value.trim();
   S.memo        = document.getElementById('trip-memo').value.trim();
 }
 function applyToForm(){
-  document.getElementById('trip-title').value  = S.title;
-  document.getElementById('destination').value  = S.destination;
-  document.getElementById('trip-memo').value    = S.memo;
-  document.getElementById('start-date').value   = S.startDate;
-  document.getElementById('nights').value       = S.nights;
+  document.getElementById('trip-title').value = S.title;
+  document.getElementById('destination').value = S.destination;
+  document.getElementById('trip-memo').value   = S.memo;
+  document.getElementById('start-date').value  = S.startDate;
+  document.getElementById('nights').value      = S.nights;
 }
 function goSched(){ readForm(); genDays(); sw('schedule'); }
 
+/* 日付フォーマット：タイムゾーン安全版 */
+function addDays(dateStr, n){
+  // YYYY-MM-DD を直接分解してローカル日付を操作
+  const [y,m,d] = dateStr.split('-').map(Number);
+  const dt = new Date(y, m-1, d+n);
+  const yy = dt.getFullYear();
+  const mm = String(dt.getMonth()+1).padStart(2,'0');
+  const dd = String(dt.getDate()).padStart(2,'0');
+  return `${yy}-${mm}-${dd}`;
+}
 function fmtJa(ds){
   if(!ds) return '';
-  return new Date(ds+'T00:00:00').toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
+  const [y,m,d] = ds.split('-').map(Number);
+  return new Date(y,m-1,d).toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
 }
 function fmtYmd(ds){
   if(!ds) return '';
-  return new Date(ds+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'short',day:'numeric'});
+  const [y,m,d] = ds.split('-').map(Number);
+  return new Date(y,m-1,d).toLocaleDateString('ja-JP',{year:'numeric',month:'short',day:'numeric'});
 }
 
-/* ══════════════════════════════════════
+/* ══════════════════════════
    DAYS
-══════════════════════════════════════ */
+══════════════════════════ */
 function genDays(){
-  const sd=document.getElementById('start-date').value;
-  const n=parseInt(document.getElementById('nights').value)||0;
-  S.startDate=sd; S.nights=n;
-  const ex=S.days;
-  S.days=Array.from({length:n+1},(_,i)=>{
-    let ds='';
-    if(sd){const d=new Date(sd+'T00:00:00');d.setDate(d.getDate()+i);ds=d.toISOString().split('T')[0];}
-    return ex[i]?{...ex[i],date:ds}:{date:ds,items:[]};
+  const sd = document.getElementById('start-date').value;
+  const n  = parseInt(document.getElementById('nights').value)||0;
+  S.startDate = sd; S.nights = n;
+  const ex = S.days;
+  S.days = Array.from({length:n+1}, (_,i) => {
+    const ds = sd ? addDays(sd, i) : '';           // ← 修正①：タイムゾーン安全
+    return ex[i] ? {...ex[i], date:ds} : {date:ds, items:[]};
   });
   renderDays();
 }
-function sortIt(its){return[...its].sort((a,b)=>{if(!a.time&&!b.time)return 0;if(!a.time)return 1;if(!b.time)return -1;return a.time.localeCompare(b.time);});}
+
+function sortIt(its){
+  return [...its].sort((a,b)=>{
+    if(!a.time&&!b.time)return 0;
+    if(!a.time)return 1; if(!b.time)return -1;
+    return a.time.localeCompare(b.time);
+  });
+}
+
+/* 修正②：その日の最遅時刻を返す */
+function latestTime(di){
+  const times = S.days[di].items.map(it=>it.time).filter(Boolean);
+  if(!times.length) return '';
+  return times.sort().at(-1);
+}
+
+/* 修正③：移動の到着時刻計算 */
+function calcArrival(depTime, durMin){
+  if(!depTime || !durMin) return '';
+  const [h,m] = depTime.split(':').map(Number);
+  const total = h*60 + m + parseInt(durMin);
+  return `${String(Math.floor(total/60)%24).padStart(2,'0')}:${String(total%60).padStart(2,'0')}`;
+}
+
+/* 予定アイテム1行分のHTML */
+function itemHTML(it, di, oi){
+  if(it._move){
+    const fromTo = [it.from?esc(it.from):'', it.to?esc(it.to):''].filter(Boolean).join(' → ');
+    const meta   = [it.time?'出発 '+it.time:'', it.arrTime?'到着 '+it.arrTime:'', it.duration?it.duration+'分':''].filter(Boolean).join('  ');
+    return '<div class="si-move">'
+      + '<div class="move-icon">'+(TI[it.transport]||'🚗')+'</div>'
+      + '<div class="move-body">'
+      +   '<div class="move-title">'+esc(it.transport||'')+(fromTo?' '+fromTo:'')+'</div>'
+      +   (meta?'<div class="move-meta">'+meta+'</div>':'')
+      + '</div>'
+      + '<button class="btn bd bsm" onclick="rmItem('+di+','+oi+')"><i class="ti ti-x"></i></button>'
+      + '</div>';
+  }
+  return '<div class="si">'
+    + '<div class="tc">'+(it.time||'—')+'</div>'
+    + '<div class="ic">'
+    +   '<div class="it">'+esc(it.title)+'</div>'
+    +   (it.note?'<div class="im">'+esc(it.note)+'</div>':'')
+
+    + '</div>'
+    + '<button class="btn bd bsm" onclick="rmItem('+di+','+oi+')"><i class="ti ti-x"></i></button>'
+    + '</div>';
+}
+
+/* 追加フォームのHTML（ネスト分離） */
+function addFormHTML(di, latest){
+  const mtrBtns = TRANS.map(t=>'<button class="tbt tbt-move" onclick="selMTr('+di+',\''+t+'\')" id="mtb-'+di+'-'+t+'">'+TI[t]+' '+t+'</button>').join('');
+  return '<div class="af" id="af-'+di+'" style="display:none;">'
+    /* タブ */
+    + '<div class="af-tabs">'
+    +   '<button class="af-tab on" id="aft-sched-'+di+'" onclick="afTab('+di+',\'sched\')">📋 予定を追加</button>'
+    +   '<button class="af-tab af-tab-move" id="aft-move-'+di+'" onclick="afTab('+di+',\'move\')">🚗 移動を追加</button>'
+    + '</div>'
+    /* 予定ペイン */
+    + '<div class="af-pane on" id="afp-sched-'+di+'">'
+    +   '<div class="row">'
+    +     '<div class="fld time-fld"><label>時刻</label><input type="time" id="ft-'+di+'" value="'+latest+'"></div>'
+    +     '<div class="fld"><label>内容</label><input type="text" id="fn-'+di+'" placeholder="例：金閣寺 見学" onkeydown="if(event.key===\'Enter\')addItem('+di+')"></div>'
+    +   '</div>'
+    +   '<div class="fld" style="margin-bottom:10px;"><label>メモ</label><input type="text" id="fm-'+di+'" placeholder="所要時間・料金など"></div>'
+
+    +   '<div style="display:flex;gap:8px;">'
+    +     '<button class="btn bp bsm" onclick="addItem('+di+')"><i class="ti ti-check"></i> 追加</button>'
+    +     '<button class="btn bo bsm" onclick="togAF('+di+')">キャンセル</button>'
+    +   '</div>'
+    + '</div>'
+    /* 移動ペイン */
+    + '<div class="af-pane" id="afp-move-'+di+'">'
+    +   '<div class="fld" style="margin-bottom:10px;"><label>交通手段</label>'
+    +     '<div class="tg" id="mtg-'+di+'">'+mtrBtns+'</div>'
+    +   '</div>'
+    +   '<div class="row">'
+    +     '<div class="fld time-fld"><label>出発時刻</label><input type="time" id="mdep-'+di+'" value="'+latest+'" oninput="updateArr('+di+')"></div>'
+    +     '<div class="fld time-fld"><label>所要時間(分)</label><input type="number" id="mdur-'+di+'" placeholder="60" min="1" oninput="updateArr('+di+')"></div>'
+    +     '<div class="fld time-fld"><label>到着時刻</label><input type="time" id="marr-'+di+'"></div>'
+    +   '</div>'
+    +   '<div class="row">'
+    +     '<div class="fld"><label>出発地</label><input type="text" id="mfrom-'+di+'" placeholder="例：新大阪駅"></div>'
+    +     '<div class="fld"><label>到着地</label><input type="text" id="mto-'+di+'" placeholder="例：東京駅"></div>'
+    +   '</div>'
+    +   '<div style="display:flex;gap:8px;">'
+    +     '<button class="btn bt bsm" onclick="addMove('+di+')"><i class="ti ti-check"></i> 追加</button>'
+    +     '<button class="btn bo bsm" onclick="togAF('+di+')">キャンセル</button>'
+    +   '</div>'
+    + '</div>'
+    + '</div>';
+}
+
 function renderDays(){
-  const c=document.getElementById('days-con'),nd=document.getElementById('no-days');
+  const c=document.getElementById('days-con'), nd=document.getElementById('no-days');
   if(!S.days.length){c.innerHTML='';nd.style.display='block';return;}
   nd.style.display='none';
-  c.innerHTML=S.days.map((day,di)=>{
-    const lbl=di===0?'出発日':di===S.days.length-1?'最終日':`${di+1}日目`;
-    const sorted=sortIt(day.items);
-    return`<div class="card">
-      <div class="dh">
-        <div class="dl"><div class="dt">Day ${di+1} — ${lbl}</div>${day.date?`<span class="dd">${fmtJa(day.date)}</span>`:''}</div>
-        <button class="btn bo bsm" onclick="togAF(${di})"><i class="ti ti-plus"></i> 追加</button>
-      </div>
-      <div id="it-${di}">
-        ${sorted.length?sorted.map(it=>{const oi=day.items.indexOf(it);return`<div class="si">
-          <div class="tc">${it.time||'—'}</div>
-          <div class="ic"><div class="it">${esc(it.title)}</div>
-            ${it.note?`<div class="im">${esc(it.note)}</div>`:''}
-            ${it.transport?`<span class="tb2">${TI[it.transport]||''}${it.transport}</span>`:''}
-          </div>
-          <button class="btn bd bsm" onclick="rmItem(${di},${oi})"><i class="ti ti-x"></i></button>
-        </div>`;}).join(''):'<div style="color:var(--text3);font-size:13px;padding:10px 0;">まだ予定がありません</div>'}
-      </div>
-      <div class="af" id="af-${di}" style="display:none;">
-        <div class="row">
-          <div class="fld" style="flex:0 0 90px;max-width:90px;"><label>時刻</label><input type="time" id="ft-${di}"></div>
-          <div class="fld"><label>内容</label><input type="text" id="fn-${di}" placeholder="例：金閣寺 見学" onkeydown="if(event.key==='Enter')addItem(${di})"></div>
-        </div>
-        <div class="fld" style="margin-bottom:10px;"><label>メモ</label><input type="text" id="fm-${di}" placeholder="所要時間・料金など"></div>
-        <div class="fld" style="margin-bottom:12px;"><label>移動手段</label>
-          <div class="tg" id="tg-${di}">${TRANS.map(t=>`<button class="tbt" onclick="selTr(${di},'${t}')" id="tb-${di}-${t}">${TI[t]} ${t}</button>`).join('')}</div>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn bp bsm" onclick="addItem(${di})"><i class="ti ti-check"></i> 追加</button>
-          <button class="btn bo bsm" onclick="togAF(${di})">キャンセル</button>
-        </div>
-      </div>
-    </div>`;
+  c.innerHTML = S.days.map((day,di)=>{
+    const lbl    = di===0?'出発日':di===S.days.length-1?'最終日':`${di+1}日目`;
+    const sorted = sortIt(day.items);
+    const latest = latestTime(di);
+    const dateSpan = day.date ? '<span class="dd">'+fmtJa(day.date)+'</span>' : '';
+    const itemsHTML = sorted.length
+      ? sorted.map(it=>itemHTML(it, di, day.items.indexOf(it))).join('')
+      : '<div style="color:var(--text3);font-size:13px;padding:10px 0;">まだ予定がありません</div>';
+
+    return '<div class="card">'
+      + '<div class="dh">'
+      +   '<div class="dl"><div class="dt">Day '+(di+1)+' — '+lbl+'</div>'+dateSpan+'</div>'
+      +   '<button class="btn bo bsm" onclick="togAF('+di+')"><i class="ti ti-plus"></i> 追加</button>'
+      + '</div>'
+      + '<div id="it-'+di+'">'+itemsHTML+'</div>'
+      + addFormHTML(di, latest)
+      + '</div>';
   }).join('');
 }
-const selTr_s={};
-function selTr(di,t){selTr_s[di]=selTr_s[di]===t?null:t;document.querySelectorAll(`#tg-${di} .tbt`).forEach(b=>b.classList.remove('on'));if(selTr_s[di]){const e=document.getElementById(`tb-${di}-${t}`);if(e)e.classList.add('on');}}
-function togAF(di){const f=document.getElementById(`af-${di}`);f.style.display=f.style.display==='none'?'block':'none';if(f.style.display==='block')setTimeout(()=>document.getElementById(`fn-${di}`).focus(),80);}
-function addItem(di){const t=document.getElementById(`ft-${di}`).value,n=document.getElementById(`fn-${di}`).value.trim(),m=document.getElementById(`fm-${di}`).value.trim();if(!n)return;S.days[di].items.push({time:t,title:n,note:m,transport:selTr_s[di]||''});selTr_s[di]=null;renderDays();}
-function rmItem(di,ii){S.days[di].items.splice(ii,1);renderDays();}
 
-/* ══════════════════════════════════════
+const selMTr_s={};
+
+function afTab(di, pane){
+  ['sched','move'].forEach(p=>{
+    document.getElementById(`aft-${p}-${di}`).classList.toggle('on', p===pane);
+    document.getElementById(`afp-${p}-${di}`).classList.toggle('on', p===pane);
+    if(p==='move') document.getElementById(`aft-move-${di}`).classList.toggle('on', pane==='move');
+  });
+  // フォーカス
+  if(pane==='sched') setTimeout(()=>document.getElementById(`fn-${di}`)?.focus(),80);
+  else setTimeout(()=>document.getElementById(`mfrom-${di}`)?.focus(),80);
+}
+
+function selMTr(di,t){
+  selMTr_s[di]=selMTr_s[di]===t?null:t;
+  document.querySelectorAll(`#mtg-${di} .tbt-move`).forEach(b=>b.classList.remove('on'));
+  if(selMTr_s[di]){const e=document.getElementById(`mtb-${di}-${t}`);if(e)e.classList.add('on');}
+}
+function updateArr(di){
+  const dep=document.getElementById(`mdep-${di}`).value;
+  const dur=document.getElementById(`mdur-${di}`).value;
+  const arr=calcArrival(dep,dur);
+  if(arr) document.getElementById(`marr-${di}`).value=arr;
+}
+
+function togAF(di){
+  const f=document.getElementById(`af-${di}`);
+  f.style.display=f.style.display==='none'?'block':'none';
+  if(f.style.display==='block'){
+    // 修正②：最遅時刻を初期値にセット
+    const latest=latestTime(di);
+    const ftEl=document.getElementById(`ft-${di}`);
+    const mdepEl=document.getElementById(`mdep-${di}`);
+    if(ftEl) ftEl.value=latest;
+    if(mdepEl) mdepEl.value=latest;
+    setTimeout(()=>document.getElementById(`fn-${di}`)?.focus(),80);
+  }
+}
+
+function addItem(di){
+  const t=document.getElementById(`ft-${di}`).value;
+  const n=document.getElementById(`fn-${di}`).value.trim();
+  const m=document.getElementById(`fm-${di}`).value.trim();
+  if(!n) return;
+  S.days[di].items.push({time:t,title:n,note:m});
+  renderDays();
+}
+function addMove(di){
+  const tr=selMTr_s[di]||'';
+  const dep=document.getElementById(`mdep-${di}`).value;
+  const dur=document.getElementById(`mdur-${di}`).value;
+  const arr=document.getElementById(`marr-${di}`).value;
+  const from=document.getElementById(`mfrom-${di}`).value.trim();
+  const to=document.getElementById(`mto-${di}`).value.trim();
+  if(!tr && !from && !to){ toast('交通手段か発着地を入力してください'); return; }
+  S.days[di].items.push({_move:true, time:dep, arrTime:arr, duration:dur, transport:tr, from, to});
+  selMTr_s[di]=null; renderDays();
+}
+function rmItem(di,ii){ S.days[di].items.splice(ii,1); renderDays(); }
+
+/* ══════════════════════════
    PACKING
-══════════════════════════════════════ */
+══════════════════════════ */
 const DEF=[
   {cat:'必需品',text:'パスポート / 身分証'},{cat:'必需品',text:'財布・現金'},{cat:'必需品',text:'クレジットカード'},
   {cat:'必需品',text:'スマートフォン・充電器'},{cat:'必需品',text:'薬・常備薬'},
@@ -503,211 +616,261 @@ function renderPack(){
   }).join('');
 }
 
-/* ══════════════════════════════════════
-   LOCALSTORAGE 履歴管理
-══════════════════════════════════════ */
-function loadHistories(){
-  try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }
-  catch(e){ return []; }
-}
-function saveHistories(list){
-  try{ localStorage.setItem(LS_KEY, JSON.stringify(list)); }
-  catch(e){ toast('保存失敗: ストレージ容量不足の可能性があります'); }
-}
-/** 出発日昇順でソート（未設定は末尾） */
-function sortHistories(list){
-  return [...list].sort((a,b)=>{
-    if(!a.startDate && !b.startDate) return 0;
-    if(!a.startDate) return 1;
-    if(!b.startDate) return -1;
-    return a.startDate.localeCompare(b.startDate);
-  });
-}
-/** バッジ更新 */
+/* ══════════════════════════
+   HISTORY
+══════════════════════════ */
+function loadHistories(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch{return[];}}
+function saveHistories(list){try{localStorage.setItem(LS_KEY,JSON.stringify(list));}catch{toast('保存失敗: ストレージ容量不足の可能性があります');}}
+function sortHistories(list){return[...list].sort((a,b)=>{if(!a.startDate&&!b.startDate)return 0;if(!a.startDate)return 1;if(!b.startDate)return -1;return a.startDate.localeCompare(b.startDate);});}
 function updateBadge(){
-  const n = loadHistories().length;
-  const hb = document.getElementById('hist-badge');
-  const bb = document.getElementById('bb-badge');
-  if(n>0){
-    hb.textContent=n; hb.style.display='inline-flex';
-    bb.textContent=n; bb.classList.add('show');
-  } else {
-    hb.style.display='none'; bb.classList.remove('show');
-  }
+  const n=loadHistories().length;
+  const hb=document.getElementById('hist-badge'), bb=document.getElementById('bb-badge');
+  if(n>0){hb.textContent=n;hb.style.display='inline-flex';bb.textContent=n;bb.classList.add('show');}
+  else{hb.style.display='none';bb.classList.remove('show');}
 }
-
-/** 現在のStateをスナップショットとして返す */
 function stateSnapshot(){
   readForm();
-  return {
-    id: S._id || ('trip_'+Date.now()),
-    title: S.title,
-    destination: S.destination,
-    memo: S.memo,
-    startDate: S.startDate,
-    nights: S.nights,
-    days: JSON.parse(JSON.stringify(S.days)),
-    packing: JSON.parse(JSON.stringify(S.packing)),
-    savedAt: new Date().toISOString()
-  };
+  return{id:S._id||('trip_'+Date.now()),title:S.title,destination:S.destination,memo:S.memo,startDate:S.startDate,nights:S.nights,days:JSON.parse(JSON.stringify(S.days)),packing:JSON.parse(JSON.stringify(S.packing)),savedAt:new Date().toISOString()};
 }
-
-/** 旅程を保存（上書き or 新規） */
 function saveTrip(){
   readForm();
-  if(!S.title && !S.startDate){
-    toast('タイトルまたは出発日を入力してください'); return;
-  }
-  const snap = stateSnapshot();
-  S._id = snap.id;
-  const list = loadHistories();
-  const idx = list.findIndex(h=>h.id===snap.id);
-  if(idx>=0) list[idx]=snap; else list.push(snap);
-  saveHistories(list);
-  updateBadge();
-  toast(`「${snap.title||'無題の旅程'}」を保存しました`);
+  if(!S.title&&!S.startDate){toast('タイトルまたは出発日を入力してください');return;}
+  const snap=stateSnapshot(); S._id=snap.id;
+  const list=loadHistories(); const idx=list.findIndex(h=>h.id===snap.id);
+  if(idx>=0)list[idx]=snap;else list.push(snap);
+  saveHistories(list); updateBadge(); toast(`「${snap.title||'無題の旅程'}」を保存しました`);
 }
-
-/** Stateに旅程を読み込む */
 function loadTrip(snap){
-  S._id        = snap.id;
-  S.title      = snap.title      || '';
-  S.destination= snap.destination|| '';
-  S.memo       = snap.memo       || '';
-  S.startDate  = snap.startDate  || '';
-  S.nights     = snap.nights     || 0;
-  S.days       = JSON.parse(JSON.stringify(snap.days   ||[]));
-  S.packing    = JSON.parse(JSON.stringify(snap.packing||[]));
-  applyToForm();
-  renderDays();
-  renderPack();
-  closeModal();
-  sw('setup');
+  S._id=snap.id; S.title=snap.title||''; S.destination=snap.destination||''; S.memo=snap.memo||'';
+  S.startDate=snap.startDate||''; S.nights=snap.nights||0;
+  S.days=JSON.parse(JSON.stringify(snap.days||[]));
+  S.packing=JSON.parse(JSON.stringify(snap.packing||[]));
+  applyToForm(); renderDays(); renderPack(); closeModal(); sw('setup');
   toast(`「${snap.title||'無題の旅程'}」を読み込みました`);
 }
-
-/** 新規旅程（Stateをリセット） */
 function newTrip(){
-  S._id=''; S.title=''; S.destination=''; S.memo='';
-  S.startDate=''; S.nights=2; S.days=[]; S.packing=[];
+  S._id='';S.title='';S.destination='';S.memo='';S.startDate='';S.nights=2;S.days=[];S.packing=[];
   applyToForm();
   document.getElementById('days-con').innerHTML='';
   document.getElementById('no-days').style.display='block';
   renderPack();
   document.getElementById('img-list').innerHTML='';
   document.getElementById('img-hint').style.display='flex';
-  closeModal();
-  sw('setup');
-  toast('新しい旅程を作成します');
+  closeModal(); sw('setup'); toast('新しい旅程を作成します');
 }
 
-/* ── 削除確認 ── */
-let pendingDeleteId = null;
-function confirmDelete(id, title){
-  pendingDeleteId = id;
-  document.getElementById('confirm-msg').textContent = `「${title||'この旅程'}」を削除します。この操作は取り消せません。`;
+let pendingDeleteId=null;
+function confirmDelete(id,title){
+  pendingDeleteId=id;
+  document.getElementById('confirm-msg').textContent=`「${title||'この旅程'}」を削除します。この操作は取り消せません。`;
   document.getElementById('confirm-wrap').classList.add('on');
 }
-function closeConfirm(){
-  pendingDeleteId=null;
-  document.getElementById('confirm-wrap').classList.remove('on');
-}
+function closeConfirm(){pendingDeleteId=null;document.getElementById('confirm-wrap').classList.remove('on');}
 document.getElementById('confirm-ok').addEventListener('click',()=>{
-  if(!pendingDeleteId) return;
-  const list = loadHistories().filter(h=>h.id!==pendingDeleteId);
-  saveHistories(list);
-  // 今編集中の旅程が削除された場合はIDをリセット
-  if(S._id===pendingDeleteId) S._id='';
-  updateBadge();
-  closeConfirm();
-  renderModal();
-  toast('削除しました');
+  if(!pendingDeleteId)return;
+  const list=loadHistories().filter(h=>h.id!==pendingDeleteId);
+  saveHistories(list); if(S._id===pendingDeleteId)S._id='';
+  updateBadge(); closeConfirm(); renderModal(); toast('削除しました');
 });
 
-/* ── モーダル ── */
-function openModal(){
-  renderModal();
-  document.getElementById('modal-back').classList.add('on');
-  document.body.style.overflow='hidden';
-}
-function closeModal(e){
-  if(e && e.target!==document.getElementById('modal-back')) return;
-  document.getElementById('modal-back').classList.remove('on');
-  document.body.style.overflow='';
-}
+function openModal(){renderModal();document.getElementById('modal-back').classList.add('on');document.body.style.overflow='hidden';}
+function closeModal(e){if(e&&e.target!==document.getElementById('modal-back'))return;document.getElementById('modal-back').classList.remove('on');document.body.style.overflow='';}
 function renderModal(){
-  const list = sortHistories(loadHistories());
-  const body = document.getElementById('modal-body');
-  let html = `<button class="modal-new" onclick="newTrip()"><i class="ti ti-plus"></i> 新しい旅程を作成する</button>`;
-  if(!list.length){
-    html += `<div class="hist-empty"><i class="ti ti-map-off"></i><p>保存された旅程がありません</p></div>`;
-  } else {
-    html += list.map(h=>{
-      const isCurrent = h.id === S._id;
-      const nights = h.nights||0;
-      const sdStr  = h.startDate ? fmtYmd(h.startDate) : '日程未設定';
-      const edDate = h.startDate ? (()=>{ const d=new Date(h.startDate+'T00:00:00'); d.setDate(d.getDate()+nights); return fmtYmd(d.toISOString().split('T')[0]); })() : '';
-      const dateRange = h.startDate ? `${sdStr} 〜 ${edDate}` : sdStr;
-      const saved  = new Date(h.savedAt).toLocaleDateString('ja-JP',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-      const schedTotal = (h.days||[]).reduce((a,d)=>a+d.items.length,0);
-      return `<div class="hist-item">
-        <div class="hist-left" onclick="loadTrip(${JSON.stringify(h).replace(/"/g,'&quot;')})">
-          <div class="hist-name">${esc(h.title||'無題の旅程')}${isCurrent?' <span style="font-size:10px;color:var(--text2);font-weight:400;">（編集中）</span>':''}</div>
-          <div class="hist-meta">
-            ${h.destination?`<span class="hist-tag"><i class="ti ti-map-pin" style="font-size:11px;"></i>${esc(h.destination)}</span>`:''}
-            <span class="hist-tag"><i class="ti ti-calendar" style="font-size:11px;"></i>${dateRange}</span>
-            <span class="hist-tag">${nights}泊${nights+1}日</span>
-            ${schedTotal?`<span class="hist-tag"><i class="ti ti-clock" style="font-size:11px;"></i>${schedTotal}件</span>`:''}
-            <span style="font-size:11px;color:var(--text3);">保存: ${saved}</span>
-          </div>
+  const list=sortHistories(loadHistories()); const body=document.getElementById('modal-body');
+  let html=`<button class="modal-new" onclick="newTrip()"><i class="ti ti-plus"></i> 新しい旅程を作成する</button>`;
+  if(!list.length){html+='<div class="hist-empty"><i class="ti ti-map-off"></i><p>保存された旅程がありません</p></div>';}
+  else html+=list.map(h=>{
+    const isCurrent=h.id===S._id;
+    const nights=h.nights||0;
+    const sdStr=h.startDate?fmtYmd(h.startDate):'日程未設定';
+    const edStr=h.startDate?fmtYmd(addDays(h.startDate,nights)):'';
+    const dateRange=h.startDate?`${sdStr} 〜 ${edStr}`:sdStr;
+    const saved=new Date(h.savedAt).toLocaleDateString('ja-JP',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    const schedTotal=(h.days||[]).reduce((a,d)=>a+d.items.length,0);
+    return`<div class="hist-item">
+      <div class="hist-left" onclick="loadTrip(${JSON.stringify(h).replace(/"/g,'&quot;')})">
+        <div class="hist-name">${esc(h.title||'無題の旅程')}${isCurrent?' <span style="font-size:10px;color:var(--text2);font-weight:400;">（編集中）</span>':''}</div>
+        <div class="hist-meta">
+          ${h.destination?`<span class="hist-tag"><i class="ti ti-map-pin" style="font-size:11px;"></i>${esc(h.destination)}</span>`:''}
+          <span class="hist-tag"><i class="ti ti-calendar" style="font-size:11px;"></i>${dateRange}</span>
+          <span class="hist-tag">${nights}泊${nights+1}日</span>
+          ${schedTotal?`<span class="hist-tag"><i class="ti ti-clock" style="font-size:11px;"></i>${schedTotal}件</span>`:''}
+          <span style="font-size:11px;color:var(--text3);">保存: ${saved}</span>
         </div>
-        <div class="hist-actions">
-          <button class="hist-act-btn" onclick="loadTrip(${JSON.stringify(h).replace(/"/g,'&quot;')})"><i class="ti ti-download"></i> 読込</button>
-          <button class="hist-act-btn del" onclick="confirmDelete('${h.id}','${esc(h.title||'無題の旅程')}')"><i class="ti ti-trash"></i> 削除</button>
-        </div>
-      </div>`;
-    }).join('');
-  }
-  body.innerHTML = html;
+      </div>
+      <div class="hist-actions">
+        <button class="hist-act-btn" onclick="loadTrip(${JSON.stringify(h).replace(/"/g,'&quot;')})"><i class="ti ti-download"></i> 読込</button>
+        <button class="hist-act-btn del" onclick="confirmDelete('${h.id}','${esc(h.title||'無題の旅程')}')"><i class="ti ti-trash"></i> 削除</button>
+      </div>
+    </div>`;
+  }).join('');
+  body.innerHTML=html;
 }
 
-/* ══════════════════════════════════════
+/* ══════════════════════════
    CANVAS 画像生成
-══════════════════════════════════════ */
-const CW=750, PAD=40, PAGE_H=1200, SCALE=2;
-const F={title:'bold 28px sans-serif',sub:'14px sans-serif',h2:'bold 16px sans-serif',dayBadge:'bold 13px sans-serif',body:'14px sans-serif',small:'12px sans-serif',badge:'11px sans-serif',stat:'bold 26px sans-serif',statL:'11px sans-serif',footer:'11px sans-serif'};
+══════════════════════════ */
+const CW=750,PAD=40,PAGE_H=1200,SCALE=2;
+const F={title:'bold 28px sans-serif',sub:'14px sans-serif',subSm:'12px sans-serif',h2:'bold 16px sans-serif',dayBadge:'bold 13px sans-serif',small:'12px sans-serif',badge:'11px sans-serif',footer:'11px sans-serif'};
 
-function wrapText(ctx,text,maxW){const words=text.split('');const lines=[];let cur='';for(const ch of words){const test=cur+ch;if(ctx.measureText(test).width>maxW&&cur){lines.push(cur);cur=ch;}else{cur=test;}}if(cur)lines.push(cur);return lines;}
+function wrapText(ctx,text,maxW){const words=text.split('');const lines=[];let cur='';for(const ch of words){const test=cur+ch;if(ctx.measureText(test).width>maxW&&cur){lines.push(cur);cur=ch;}else cur=test;}if(cur)lines.push(cur);return lines;}
 
 function buildBlocks(){
   readForm();
   const blocks=[];
   const sd=S.startDate;
-  const sdStr=sd?new Date(sd+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}):'';
-  const ed=sd?(()=>{const d=new Date(sd+'T00:00:00');d.setDate(d.getDate()+S.nights);return d.toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});})():'';
-  const sub=[S.destination,sdStr&&ed?`${sdStr} 〜 ${ed}`:sdStr].filter(Boolean).join('  ｜  ');
-  blocks.push({type:'header',title:S.title||'旅行プラン',sub,nights:S.nights});
-  S.days.forEach((day,di)=>{const lbl=di===0?'出発日':di===S.days.length-1?'最終日':`${di+1}日目`;blocks.push({type:'day',di,lbl,date:fmtJa(day.date),items:sortIt(day.items)});});
+  // 修正④：ヘッダー — n泊n日を小さく、日付範囲を一緒に表示
+  const sdStr  = sd ? fmtYmd(sd) : '';
+  const edStr  = sd ? fmtYmd(addDays(sd, S.nights)) : '';
+  const dateRange = sdStr && edStr ? `${sdStr} 〜 ${edStr}` : sdStr;
+  const subMain = S.destination || '';
+  const subSub  = [dateRange, S.nights ? `${S.nights}泊${parseInt(S.nights)+1}日間` : ''].filter(Boolean).join('　');
+  blocks.push({type:'header', title:S.title||'旅行プラン', subMain, subSub});
+  S.days.forEach((day,di)=>{
+    const lbl=di===0?'出発日':di===S.days.length-1?'最終日':`${di+1}日目`;
+    blocks.push({type:'day',di,lbl,date:fmtJa(day.date),items:sortIt(day.items)});
+  });
   const cats=[...new Set(S.packing.map(p=>p.cat))];
-  if(cats.length){blocks.push({type:'pack-head'});cats.forEach(cat=>{blocks.push({type:'pack-cat',cat,items:S.packing.filter(p=>p.cat===cat)});});}
+  if(cats.length){blocks.push({type:'pack-head'});cats.forEach(cat=>blocks.push({type:'pack-cat',cat,items:S.packing.filter(p=>p.cat===cat)}));}
   return blocks;
 }
-function estimateH(b){switch(b.type){case'header':return 180;case'day':return 50+Math.max(b.items.length,1)*46;case'pack-head':return 50;case'pack-cat':return 40+Math.ceil(b.items.length/3)*30;default:return 40;}}
-function paginate(blocks){const pages=[];let cur=[],curH=0;for(const b of blocks){const h=estimateH(b);if(b.type==='header'){cur.push(b);curH+=h;continue;}if(curH+h+30>PAGE_H&&cur.length){pages.push(cur);cur=[b];curH=h;}else{cur.push(b);curH+=h;}}if(cur.length)pages.push(cur);return pages;}
+
+function estimateH(b){
+  switch(b.type){
+    case'header': return 160;
+    case'day':    return 50+Math.max(b.items.length,1)*46;
+    case'pack-head':return 50;
+    case'pack-cat': return 40+Math.ceil(b.items.length/3)*30;
+    default: return 40;
+  }
+}
+function paginate(blocks){
+  const pages=[];let cur=[],curH=0;
+  for(const b of blocks){
+    const h=estimateH(b);
+    if(b.type==='header'){cur.push(b);curH+=h;continue;}
+    if(curH+h+30>PAGE_H&&cur.length){pages.push(cur);cur=[b];curH=h;}
+    else{cur.push(b);curH+=h;}
+  }
+  if(cur.length)pages.push(cur);
+  return pages;
+}
 
 function drawPage(pageBlocks,pageNum,total){
-  const canvas=document.createElement('canvas');canvas.width=CW*SCALE;canvas.height=PAGE_H*SCALE;
-  const ctx=canvas.getContext('2d');ctx.scale(SCALE,SCALE);ctx.fillStyle='#ffffff';ctx.fillRect(0,0,CW,PAGE_H);
+  const canvas=document.createElement('canvas');
+  canvas.width=CW*SCALE; canvas.height=PAGE_H*SCALE;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(SCALE,SCALE);
+  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,CW,PAGE_H);
   let y=0;
-  for(const b of pageBlocks){if(b.type==='header')y=drawHeader(ctx,b,y);else if(b.type==='day')y=drawDay(ctx,b,y);else if(b.type==='pack-head')y=drawPackHead(ctx,y);else if(b.type==='pack-cat')y=drawPackCat(ctx,b,y);}
-  y+=10;ctx.font=F.footer;ctx.fillStyle='#cccccc';ctx.textAlign='center';ctx.fillText(`${S.title||'旅程プラン'}　${pageNum} / ${total}`,CW/2,y);y+=24;
-  const realH=Math.max(y,200);const out=document.createElement('canvas');out.width=CW*SCALE;out.height=realH*SCALE;out.getContext('2d').drawImage(canvas,0,0);return out;
+  for(const b of pageBlocks){
+    if(b.type==='header')       y=drawHeader(ctx,b,y);
+    else if(b.type==='day')     y=drawDay(ctx,b,y);
+    else if(b.type==='pack-head')y=drawPackHead(ctx,y);
+    else if(b.type==='pack-cat') y=drawPackCat(ctx,b,y);
+  }
+  y+=10;
+  ctx.font=F.footer; ctx.fillStyle='#cccccc'; ctx.textAlign='center';
+  ctx.fillText(`${S.title||'旅程プラン'}　${pageNum} / ${total}`,CW/2,y); y+=24;
+  const realH=Math.max(y,200);
+  const out=document.createElement('canvas'); out.width=CW*SCALE; out.height=realH*SCALE;
+  out.getContext('2d').drawImage(canvas,0,0);
+  return out;
 }
-function drawHeader(ctx,b,y){const CX=CW/2;y+=40;ctx.font=F.title;ctx.fillStyle='#1a1a1a';ctx.textAlign='center';ctx.fillText(b.title,CX,y);y+=10;if(b.sub){y+=18;ctx.font=F.sub;ctx.fillStyle='#888888';ctx.fillText(b.sub,CX,y);y+=8;}y+=20;ctx.strokeStyle='#e0e0e0';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(PAD,y);ctx.lineTo(CW-PAD,y);ctx.stroke();y+=20;const cardW=(CW-PAD*2-12)/2;[[`${b.nights}泊`,'泊数'],[`${(parseInt(b.nights)||0)+1}日間`,'日程']].forEach(([val,lbl],i)=>{const x=PAD+i*(cardW+12);roundRect(ctx,x,y,cardW,72,8,'#f5f5f5');ctx.font=F.stat;ctx.fillStyle='#1a1a1a';ctx.textAlign='center';ctx.fillText(val,x+cardW/2,y+40);ctx.font=F.statL;ctx.fillStyle='#888';ctx.fillText(lbl,x+cardW/2,y+58);});y+=72+28;ctx.textAlign='left';return y;}
-function drawDay(ctx,b,y){const IW=CW-PAD*2;y+=4;const badgeLabel=`Day ${b.di+1} — ${b.lbl}${b.date?' '+b.date:''}`;ctx.font=F.dayBadge;const badgeW=ctx.measureText(badgeLabel).width+28;roundRect(ctx,PAD,y,badgeW,28,6,'#1a1a1a');ctx.fillStyle='#ffffff';ctx.fillText(badgeLabel,PAD+14,y+19);y+=36;if(!b.items.length){ctx.font=F.small;ctx.fillStyle='#cccccc';ctx.fillText('予定なし',PAD,y+14);y+=30;ctx.strokeStyle='#eeeeee';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(PAD,y);ctx.lineTo(CW-PAD,y);ctx.stroke();y+=16;return y;}b.items.forEach(it=>{ctx.font=F.small;ctx.fillStyle='#999999';ctx.fillText(it.time||'—',PAD,y+15);ctx.font='bold 14px sans-serif';ctx.fillStyle='#1a1a1a';const tl=wrapText(ctx,it.title,IW-80);tl.forEach((ln,li)=>ctx.fillText(ln,PAD+70,y+15+li*18));let rowH=Math.max(tl.length*18,18);if(it.note){ctx.font=F.small;ctx.fillStyle='#999999';const nl=wrapText(ctx,it.note,IW-80);nl.forEach((ln,li)=>ctx.fillText(ln,PAD+70,y+15+rowH+li*16));rowH+=nl.length*16;}if(it.transport){const bt=TI[it.transport]+it.transport;ctx.font=F.badge;const bw=ctx.measureText(bt).width+18;roundRect(ctx,PAD+70,y+15+rowH+2,bw,20,10,'#f0f0f0');ctx.fillStyle='#666';ctx.fillText(bt,PAD+70+9,y+15+rowH+15);rowH+=26;}y+=rowH+14;ctx.strokeStyle='#eeeeee';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(PAD,y);ctx.lineTo(CW-PAD,y);ctx.stroke();y+=8;});y+=16;return y;}
-function drawPackHead(ctx,y){ctx.strokeStyle='#e0e0e0';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(PAD,y);ctx.lineTo(CW-PAD,y);ctx.stroke();y+=20;ctx.font=F.h2;ctx.fillStyle='#1a1a1a';ctx.fillText('持ち物リスト',PAD,y);y+=28;return y;}
-function drawPackCat(ctx,b,y){ctx.font='bold 11px sans-serif';ctx.fillStyle='#888';ctx.fillText(b.cat.toUpperCase(),PAD,y);y+=16;const IW=CW-PAD*2,tagH=26,tagGapX=8,tagGapY=8;let tx=PAD,rowMaxH=tagH;b.items.forEach(p=>{const lbl=(p.checked?'✓ ':'□ ')+p.text;ctx.font=F.badge;const tw=ctx.measureText(lbl).width+20;if(tx+tw>PAD+IW){y+=rowMaxH+tagGapY;tx=PAD;}const col=p.checked?'#dddddd':'#f0f0f0',tc=p.checked?'#bbbbbb':'#444444';roundRect(ctx,tx,y,tw,tagH,99,col);if(p.checked){ctx.save();ctx.globalAlpha=.5;}ctx.fillStyle=tc;ctx.fillText(lbl,tx+10,y+17);if(p.checked)ctx.restore();tx+=tw+tagGapX;});y+=rowMaxH+20;return y;}
-function roundRect(ctx,x,y,w,h,r,fill){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();ctx.fillStyle=fill;ctx.fill();}
+
+/* 修正④：ヘッダー描画 — タイトル大 → 行先 → 小さく日付・泊数 */
+function drawHeader(ctx,b,y){
+  const CX=CW/2;
+  y+=40;
+  ctx.font=F.title; ctx.fillStyle='#1a1a1a'; ctx.textAlign='center';
+  ctx.fillText(b.title,CX,y); y+=10;
+
+  if(b.subMain){
+    y+=20;
+    ctx.font='16px sans-serif'; ctx.fillStyle='#555555';
+    ctx.fillText(b.subMain,CX,y); y+=6;
+  }
+  if(b.subSub){
+    y+=16;
+    ctx.font=F.subSm; ctx.fillStyle='#aaaaaa';
+    ctx.fillText(b.subSub,CX,y); y+=6;
+  }
+
+  y+=20;
+  ctx.strokeStyle='#e0e0e0'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(PAD,y); ctx.lineTo(CW-PAD,y); ctx.stroke();
+  y+=24;
+  ctx.textAlign='left';
+  return y;
+}
+
+function drawDay(ctx,b,y){
+  const IW=CW-PAD*2; y+=4;
+  const badgeLabel=`Day ${b.di+1} — ${b.lbl}${b.date?' '+b.date:''}`;
+  ctx.font=F.dayBadge;
+  const bw=ctx.measureText(badgeLabel).width+28;
+  roundRect(ctx,PAD,y,bw,28,6,'#1a1a1a');
+  ctx.fillStyle='#ffffff'; ctx.fillText(badgeLabel,PAD+14,y+19); y+=36;
+
+  if(!b.items.length){
+    ctx.font=F.small; ctx.fillStyle='#cccccc'; ctx.fillText('予定なし',PAD,y+14); y+=30;
+    ctx.strokeStyle='#eeeeee'; ctx.lineWidth=.8; ctx.beginPath(); ctx.moveTo(PAD,y); ctx.lineTo(CW-PAD,y); ctx.stroke(); y+=16;
+    return y;
+  }
+
+  b.items.forEach(it=>{
+    if(it._move){
+      // 移動行（背景色付き）
+      ctx.fillStyle='#f0faf8';
+      ctx.fillRect(PAD-8, y, CW-PAD*2+16, 56);
+      ctx.font='18px sans-serif'; ctx.fillStyle='#0d7e6a';
+      ctx.fillText(TI[it.transport]||'🚗', PAD, y+26);
+      ctx.font='bold 13px sans-serif'; ctx.fillStyle='#0d7e6a';
+      const mvTitle=[it.transport, it.from&&it.to?`${it.from} → ${it.to}`:it.from||it.to||''].filter(Boolean).join('  ');
+      ctx.fillText(mvTitle, PAD+36, y+20);
+      ctx.font=F.small; ctx.fillStyle='#999999';
+      const mvMeta=[it.time?'出発 '+it.time:'', it.arrTime?'到着 '+it.arrTime:'', it.duration?it.duration+'分':''].filter(Boolean).join('  ');
+      ctx.fillText(mvMeta, PAD+36, y+36);
+      y+=56;
+    } else {
+      ctx.font=F.small; ctx.fillStyle='#999999'; ctx.fillText(it.time||'—',PAD,y+15);
+      ctx.font='bold 14px sans-serif'; ctx.fillStyle='#1a1a1a';
+      const tl=wrapText(ctx,it.title,IW-80); tl.forEach((ln,li)=>ctx.fillText(ln,PAD+70,y+15+li*18));
+      let rowH=Math.max(tl.length*18,18);
+      if(it.note){ctx.font=F.small;ctx.fillStyle='#999999';const nl=wrapText(ctx,it.note,IW-80);nl.forEach((ln,li)=>ctx.fillText(ln,PAD+70,y+15+rowH+li*16));rowH+=nl.length*16;}
+      if(it.transport){const bt=TI[it.transport]+it.transport;ctx.font=F.badge;const bwt=ctx.measureText(bt).width+18;roundRect(ctx,PAD+70,y+15+rowH+2,bwt,20,10,'#f0f0f0');ctx.fillStyle='#666';ctx.fillText(bt,PAD+70+9,y+15+rowH+15);rowH+=26;}
+      y+=rowH+14;
+    }
+    ctx.strokeStyle='#eeeeee'; ctx.lineWidth=.8;
+    ctx.beginPath(); ctx.moveTo(PAD,y); ctx.lineTo(CW-PAD,y); ctx.stroke(); y+=8;
+  });
+  y+=16; return y;
+}
+
+function drawPackHead(ctx,y){
+  ctx.strokeStyle='#e0e0e0';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(PAD,y);ctx.lineTo(CW-PAD,y);ctx.stroke();
+  y+=20; ctx.font=F.h2;ctx.fillStyle='#1a1a1a';ctx.fillText('持ち物リスト',PAD,y);y+=28; return y;
+}
+function drawPackCat(ctx,b,y){
+  ctx.font='bold 11px sans-serif';ctx.fillStyle='#888';ctx.fillText(b.cat.toUpperCase(),PAD,y);y+=16;
+  const IW=CW-PAD*2,tagH=26,tagGapX=8,tagGapY=8;let tx=PAD,rowMaxH=tagH;
+  b.items.forEach(p=>{
+    const lbl=(p.checked?'✓ ':'□ ')+p.text; ctx.font=F.badge;
+    const tw=ctx.measureText(lbl).width+20;
+    if(tx+tw>PAD+IW){y+=rowMaxH+tagGapY;tx=PAD;}
+    const col=p.checked?'#dddddd':'#f0f0f0',tc=p.checked?'#bbbbbb':'#444444';
+    roundRect(ctx,tx,y,tw,tagH,99,col);
+    if(p.checked){ctx.save();ctx.globalAlpha=.5;}
+    ctx.fillStyle=tc;ctx.fillText(lbl,tx+10,y+17);
+    if(p.checked)ctx.restore();
+    tx+=tw+tagGapX;
+  });
+  y+=rowMaxH+20; return y;
+}
+
+function roundRect(ctx,x,y,w,h,r,fill){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();ctx.fillStyle=fill;ctx.fill();
+}
 
 async function genImages(){
   readForm();
@@ -734,12 +897,10 @@ function getUrl(i){return document.getElementById('cv-'+i).dataset.url;}
 function dlImg(i){const name=(S.title||'旅程')+(document.querySelectorAll('.icard').length>1?`_${i+1}`:'')+'.png';const a=document.createElement('a');a.href=getUrl(i);a.download=name;a.click();toast('保存しました');}
 async function shareImg(i){const name=(S.title||'旅程')+`_${i+1}.png`;try{const blob=await(await fetch(getUrl(i))).blob();const file=new File([blob],name,{type:'image/png'});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:S.title||'旅程プラン'});toast('共有しました');}else dlImg(i);}catch(e){if(e.name!=='AbortError')dlImg(i);}}
 
-/* ── utils ── */
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
 function tick(){return new Promise(r=>setTimeout(r,0));}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-/* ── init ── */
 renderPack();
 updateBadge();
 </script>
